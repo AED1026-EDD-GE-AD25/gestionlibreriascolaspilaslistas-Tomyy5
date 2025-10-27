@@ -42,9 +42,17 @@ public class Libreria {
     }
 
     
+    
     public Libro obtenerLibroCola() {
-    return colaLibros.desencolar();
+        Libro libro = colaLibros.desencolar();
+        if (libro != null) {
+            System.out.println("libro obtenido de reservas: " + libro.getTitulo());
+        }
+        return libro;
     }
+
+
+
 
    public Libro obtenerLibroPila() {
        return pilaLibrosEliminados.cima();
