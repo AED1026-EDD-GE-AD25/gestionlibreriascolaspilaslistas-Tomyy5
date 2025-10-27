@@ -8,11 +8,12 @@ import utilerias.Fecha;
 import miPrincipal.servicio.ServicioDatos;
 import java.util.Scanner;
 
-public class Libreria{
+public class Libreria {
     ServicioDatos dataService;
     ListaDoble<Libro> listaLibros;
     Cola<Libro> colaLibros;
     Pila<Libro> pilaLibrosEliminados;
+    ListaDoble<Pedido> listaPedidos;
     Scanner scanner; 
 
     public Libreria(){
@@ -21,67 +22,113 @@ public class Libreria{
         listaLibros = new ListaDoble<>();
         colaLibros = new Cola<>();
         pilaLibrosEliminados = new Pila<>();
-
+        listaPedidos = new ListaDoble<>();
     }
 
-    public void agregarLibro(){
+    
+    public void agregarLibro(Libro libro) {
+    listaLibros.agregar(libro);
+    }
+
+    public ListaDoble<Libro> obtenerLibros() {
         
-           
+        return listaLibros;
+    }
+
+   
+    public boolean agregarLibroCola(Libro libro) {
+           colaLibros.encolar(libro);
+        return true;
+    }
+
+    
+    
+    public Libro obtenerLibroCola() {
+    if (colaLibros.estaVacia()) {
+        System.out.println("Nno hay libros en la cola de reservas");
+        return null;
+    }
+    
+    Libro libro = colaLibros.desencolar();
+    listaLibros.agregar(libro);
+
+    System.out.println("Libro '" + libro.getTitulo() + "movido de reservas a préstamos");
+          return libro;
+}
+
+
+
+
+   public Libro obtenerLibroPila() {
+       return pilaLibrosEliminados.cima();
+   }
+
+   public Cola<Libro> mostrarReservaLibros() {
+        return colaLibros;
+    }
+
+    
+    
+    
+    
+    public Libro crearLibro(String titulo, String autor, String isbn) {
+    return new Libro(titulo, autor, isbn);
+    }
+
+   
+         public Pedido crearPedido(Libro libro, Fecha fecha) {
+        Pedido pedido = new Pedido(libro, fecha);
+        listaPedidos.agregar(pedido);
+        return pedido;
+    }
+
+    
+      public boolean devolverLibro(Libro libro) {
+        try {
+            int pos = listaLibros.remover(libro);
+            return pos != -1;
+        } catch (PosicionIlegalException e) {
+            return false;
+        }
+    }
+
+    
+    public Libro eliminarUltimoLibro() throws PosicionIlegalException {
+        if (listaLibros.esVacia()) {
+                
+            return null;
         
+        }
+        Libro libro = listaLibros.remover(listaLibros.getTamanio() - 1);
+        pilaLibrosEliminados.apilar(libro);
+        return libro;
     }
 
-    public void obtenerLibros(){
-       
-
+    
+public Libro deshacerEliminarLibro() {
+        Libro libro = pilaLibrosEliminados.retirar();
+        if (libro != null) {
+            listaLibros.agregar(libro);
+        }
+          
+        return libro;
     }
 
-    public void agregarLibroCola(){
-
+    
+    public Libro buscarLibro(String isbn) {
+        try {
+            for (int i = 0; i < listaLibros.getTamanio(); i++) {
+        Libro libro = listaLibros.getValor(i);
+            if (libro.getIsbn().equals(isbn)) {
+                    
+                return libro;
+                }
+            }
         
-
-    }
-
-    public void obtenerLibroCola(){
-
-       
+        } catch (PosicionIlegalException e) {
+            return null;
+        }
         
-
+        return null;
     }
-    public voic obtenerLibroPila(){
-        
-
-
-    }
-
-    public void crearLibro(){
-        
-    }
-
-    public void crearPedido(){
-        
-
-    }
-
-    public void devolverLibro() {
-       
-
-    }
-
-    public void eliminarUltimoLibro(){
-        
-
-    }
-
-    public void deshacerEliminarLibro(){
-        
-
-    }
-
-    public void buscarLibro(String isbn) {
-
-        
-
-    }
-
-
 }

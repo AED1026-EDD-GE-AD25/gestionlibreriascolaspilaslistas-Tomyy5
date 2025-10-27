@@ -3,7 +3,8 @@ import java.util.Scanner;
 
 import listaDoble.PosicionIlegalException;
 public class Menu{
-    static Scanner scanner = new  Scanner(System.in);
+    
+static Scanner scanner = new  Scanner(System.in);
 	
 		
 	public void lectura() throws PosicionIlegalException {
@@ -27,7 +28,7 @@ public class Menu{
             System.out.println("9. Deshacer eliminacion de libro (Restaura operacion de eliminar ultimo prestamo)");
             System.out.println("0. Salir");
             opcion = scanner.nextInt();
-            scanner.nextLine(); // Consume newline
+            scanner.nextLine(); 
 
             switch (opcion) {
                 case 1:
