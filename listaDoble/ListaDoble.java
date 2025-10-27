@@ -39,7 +39,10 @@ public boolean esVacia() {
     
     
     
-public void insertar(T valor, int pos) throws PosicionIlegalException {
+
+
+
+    public void insertar(T valor, int pos) throws PosicionIlegalException {
         if (pos < 0 || pos > tamanio) {
             
             throw new PosicionIlegalException();
