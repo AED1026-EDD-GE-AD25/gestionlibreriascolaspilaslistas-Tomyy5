@@ -1,169 +1,174 @@
 package listaDoble;
-public class ListaDoble<T>{
-    //atributos
-    private Nodo<T>cabeza;
+
+public class ListaDoble<T> {
+    private Nodo<T> cabeza;
+    private Nodo<T> cola;
     private int tamanio;
-    //constructor por defecto
-    public ListaDoble(){
+
+    public ListaDoble() {
         cabeza = null;
+        cola = null;
         tamanio = 0;
     }
-    //getter y setter
+
+    public boolean esVacia() {
+        return cabeza == null;
+    }
+
     public int getTamanio() {
         return tamanio;
     }
-    //Métodos personalizados
-    //confirma si la pila esta vacia
-    public boolean esVacia(){    
-        return cabeza == null;
-    }
-    //agrega un nuevo nodo al fina de la lista
-    public void agregar(T valor){
+
+    public void agregar(T valor) {
         Nodo<T> nuevo = new Nodo<>();
-        //fija el valor al nuevo
         nuevo.setValor(valor);
-        if (esVacia()){
-            //cabeza apunta al nuevo
+
+        if (esVacia()) {
             cabeza = nuevo;
-            //cola apunta a nuevo
-            
-        }else{
-            //se agrega al fina de la lista
-            Nodo<T> aux = cabeza;
-            while (aux.getSiguiente() != null){
-                aux = aux.getSiguiente();
-            }
-            aux.setSiguiente(nuevo); 
-            
+            cola = nuevo;
+        } else {
+            cola.setSiguiente(nuevo);
+            nuevo.setAnterior(cola);
+            cola = nuevo;
         }
         tamanio++;
     }
-    /*
-     * Inserta un nuevo nodo en la lista
-     * @param valor: valor a agregar
-     * @param pos: indica la posicion en donde se insertará el nodo
-     * @throws : PosicionIlegalException en caso de que la posicion no exista
-     */
-    public void insertar(T valor, int pos) throws PosicionIlegalException{
-        if (pos>=0 && pos<=tamanio){
-            Nodo<T> nuevo = new Nodo<>();
-            nuevo.setValor(valor);
-            if(pos==0){//insertar al principo
-               
-                nuevo.setSiguiente(cabeza);
+
+    public void insertar(T valor, int pos) throws PosicionIlegalException {
+        if (pos < 0 || pos > tamanio) {
+            throw new PosicionIlegalException();
+        }
+
+        Nodo<T> nuevo = new Nodo<>();
+        nuevo.setValor(valor);
+
+        if (pos == 0) {
+            if (esVacia()) {
                 cabeza = nuevo;
+                cola = nuevo;
+            } else {
+                nuevo.setSiguiente(cabeza);
+                cabeza.setAnterior(nuevo);
+                cabeza = nuevo;
+            }
+        } else if (pos == tamanio) {
+            agregar(valor);
+            return; // Ya se incrementó el tamaño en agregar
+        } else {
+            Nodo<T> aux = cabeza;
+            for (int i = 0; i < pos - 1; i++) {
+                aux = aux.getSiguiente();
+            }
+            Nodo<T> siguiente = aux.getSiguiente();
+            aux.setSiguiente(nuevo);
+            nuevo.setAnterior(aux);
+            nuevo.setSiguiente(siguiente);
+            siguiente.setAnterior(nuevo);
+        }
+        tamanio++;
+    }
 
-            }else{
-                if(pos == tamanio){ // al final
-                    Nodo<T> aux = cabeza;
-                    while (aux.getSiguiente() != null){
-                        aux = aux.getSiguiente();
+    public T remover(int pos) throws PosicionIlegalException {
+        if (pos < 0 || pos >= tamanio) {
+            throw new PosicionIlegalException();
+        }
+
+        T valor;
+        if (pos == 0) {
+            valor = cabeza.getValor();
+            cabeza = cabeza.getSiguiente();
+            if (cabeza != null) {
+                cabeza.setAnterior(null);
+            } else {
+                cola = null;
+            }
+        } else if (pos == tamanio - 1) {
+            valor = cola.getValor();
+            cola = cola.getAnterior();
+            cola.setSiguiente(null);
+        } else {
+            Nodo<T> aux = cabeza;
+            for (int i = 0; i < pos; i++) {
+                aux = aux.getSiguiente();
+            }
+            valor = aux.getValor();
+            Nodo<T> anterior = aux.getAnterior();
+            Nodo<T> siguiente = aux.getSiguiente();
+            anterior.setSiguiente(siguiente);
+            siguiente.setAnterior(anterior);
+        }
+        tamanio--;
+        return valor;
+    }
+
+    public int remover(T valor) throws PosicionIlegalException {
+        int pos = 0;
+        Nodo<T> aux = cabeza;
+        while (aux != null) {
+            if (aux.getValor().equals(valor)) {
+                if (pos == 0) {
+                    cabeza = cabeza.getSiguiente();
+                    if (cabeza != null) {
+                        cabeza.setAnterior(null);
+                    } else {
+                        cola = null;
                     }
-                    aux.setSiguiente(nuevo); 
-                    
-
-                }else{ // en medio
-                    Nodo<T> aux = cabeza;
-                    for (int i=0;i<=pos-2;i++){
-                        aux = aux.getSiguiente();
-
-                    }
+                } else if (pos == tamanio - 1) {
+                    cola = cola.getAnterior();
+                    cola.setSiguiente(null);
+                } else {
+                    Nodo<T> anterior = aux.getAnterior();
                     Nodo<T> siguiente = aux.getSiguiente();
-                    aux.setSiguiente(nuevo);
-                    nuevo.setSiguiente(siguiente);
-                    
-
+                    anterior.setSiguiente(siguiente);
+                    siguiente.setAnterior(anterior);
                 }
-
+                tamanio--;
+                return pos;
             }
-            tamanio++;
+            aux = aux.getSiguiente();
+            pos++;
+        }
+        return -1;
+    }
 
-        }else{
+    public T getValor(int pos) throws PosicionIlegalException {
+        if (pos < 0 || pos >= tamanio) {
             throw new PosicionIlegalException();
         }
 
-    }
-    /*
-     * Elimina un nodo de una determinada posicion
-     * @param pos: posicion a eliminar
-     * @throws PosicionIlegalException
-     */
-
-    public T remover(int pos) throws PosicionIlegalException{
-        
-        
-    }
-     /*
-     * Elimina un nodo que contiene un T valor
-     * @param T: valor a eliminar
-     * @return: si lo encuentra retorna la posicion a eliminar,si no retorna -1
-     * @throws PosicionIlegalException
-     */
-
-    
-     /*
-      * Elimina un nodo de la lista buscandolo por su
-        valor, si lo encuentra retorna la posición y lo 
-        elimina,si no lo encuentra retorna -1
-    
-
-      */
-     public int remover(T valor) throws PosicionIlegalException{
-        
-       
-        
-    }
-
-    /*
-     * Devuelve el valor de una determinada posicion
-     * @param pos: posicion
-     * @return : el valor de tipo T
-     * @throws PosicionIlegalException
-     */
-    public T getValor(int pos) throws PosicionIlegalException{
-        if(pos>=0 && pos<tamanio){//es una posicion válida
-            T valor;
-            if(pos ==0){
-                valor = cabeza.getValor();
-                return valor;
-
-            }else{
-                Nodo<T> aux = cabeza;
-                for(int i=0;i<=pos-1;i++){
-                    aux = aux.getSiguiente();
-                }
-                valor = aux.getValor();
-                return valor;
-            }
-
-        }else{//es una posicion inválida
-            throw new PosicionIlegalException();
-
+        Nodo<T> aux = cabeza;
+        for (int i = 0; i < pos; i++) {
+            aux = aux.getSiguiente();
         }
-        
+        return aux.getValor();
     }
-    public void limpiar(){
+
+    public void limpiar() {
         cabeza = null;
+        cola = null;
         tamanio = 0;
     }
 
-    /*
-     * Regresa todos los datos de la lista en forma de String
-     */
+    public boolean contiene(T valor) {
+        Nodo<T> aux = cabeza;
+        while (aux != null) {
+            if (aux.getValor().equals(valor)) {
+                return true;
+            }
+            aux = aux.getSiguiente();
+        }
+        return false;
+    }
 
     @Override
     public String toString() {
-       
-
+        StringBuilder sb = new StringBuilder();
+        Nodo<T> aux = cabeza;
+        while (aux != null) {
+            sb.append(aux.getValor().toString()).append(" <-> ");
+            aux = aux.getSiguiente();
+        }
+        sb.append("null");
+        return sb.toString();
     }
-    /*
-     * busca un valor en la lista
-     * @return true si contiene ese valor
-     * si no regresa false
-     */
-    public boolean contiene(T valor){
-        
-    }
-    
-    
 }
