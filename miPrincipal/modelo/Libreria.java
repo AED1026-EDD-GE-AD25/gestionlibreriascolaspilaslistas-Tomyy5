@@ -44,12 +44,17 @@ public class Libreria {
     
     
     public Libro obtenerLibroCola() {
-        Libro libro = colaLibros.desencolar();
-        if (libro != null) {
-            System.out.println("libro obtenido de reservas: " + libro.getTitulo());
-        }
-        return libro;
+    if (colaLibros.estaVacia()) {
+        System.out.println("Nno hay libros en la cola de reservas");
+        return null;
     }
+    
+    Libro libro = colaLibros.desencolar();
+    listaLibros.agregar(libro);
+
+    System.out.println("Libro '" + libro.getTitulo() + "movido de reservas a préstamos");
+          return libro;
+}
 
 
 
