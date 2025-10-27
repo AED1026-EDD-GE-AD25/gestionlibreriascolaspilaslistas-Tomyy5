@@ -16,119 +16,134 @@ public class MenuOpciones{
     static Scanner scanner = new  Scanner(System.in);
     static private Libreria libreria = new Libreria();
 
+    
     public static void agregarLibro(){
-        System.out.print("Ingrese el título del libro: ");
+        System.out.print("ingrese título del libro: ");
+        
         String titulo = scanner.nextLine();
-        System.out.print("Ingrese el autor del libro: ");
+        System.out.print("ingrese autor del Llibro: ");
+        
         String autor = scanner.nextLine();
-        System.out.print("Ingrese el ISBN del libro: ");
+    System.out.print("ingreseISBN del libro: ");
         String isbn = scanner.nextLine();
+        
         Libro libro = libreria.crearLibro(titulo, autor, isbn);
         libreria.agregarLibro(libro);
-        System.out.println("Libro agregado a la lista de préstamos.");
+        System.out.println("libro agregado a la lista de  prestamos");
     }
+    
+    
     
     public static void mostrarLibros() throws PosicionIlegalException{
         ListaDoble<Libro> libros = libreria.obtenerLibros();
+        
         if (libros.esVacia()) {
-            System.out.println("No hay libros prestados.");
+        System.out.println("No hay libros prestados.");
         } else {
             System.out.println("Libros prestados:");
             for (int i = 0; i < libros.getTamanio(); i++) {
-                System.out.println(libros.getValor(i));
+        System.out.println(libros.getValor(i));
             }
         }
     }
 
-    public static void agregarLibroCola(){
-        System.out.print("Ingrese el título del libro a reservar: ");
+    
+    
+    
+public static void agregarLibroCola(){
+        System.out.print("ingrese el título del libro a reservar: ");
         String titulo = scanner.nextLine();
-        System.out.print("Ingrese el autor del libro a reservar: ");
+    System.out.print("ingrese el autor del libro a rieservar: ");
         String autor = scanner.nextLine();
-        System.out.print("Ingrese el ISBN del libro a reservar: ");
+          
+          System.out.print("ingrese ISBN del libro a reservar: ");
         String isbn = scanner.nextLine();
         Libro libro = libreria.crearLibro(titulo, autor, isbn);
-        if (libreria.agregarLibroCola(libro)) {
-            System.out.println("Libro agregado a la cola de reservas.");
+        
+        
+             if (libreria.agregarLibroCola(libro)) {
+            System.out.println("libro agregado a la cola de reservas");
         } else {
-            System.out.println("No se pudo agregar el libro a la cola de reservas.");
+            System.out.println("no se pudo agregar el libro a la cola de reservas  ");
         }
     }
 
+    
+    
     public static void obtenerLibroCola(){
         Libro libro = libreria.obtenerLibroCola();
         if (libro != null) {
             System.out.println("Libro obtenido de la cola: " + libro);
-        } else {
+    } else {
             System.out.println("No hay libros en la cola de reservas.");
-        }
+    }
     }
 
+    
+    
     public static void mostrarReservaLibros(){
         Cola<Libro> cola = libreria.mostrarReservaLibros();
-        // No tenemos un método para mostrar toda la cola sin desencolar, así que haremos una copia temporal.
-        // Pero nuestra cola no permite iterar. Esto es un problema de diseño.
-        // Para solucionarlo, podríamos agregar un método en Cola para obtener todos los elementos, pero no lo tenemos.
-        // Alternativamente, podríamos cambiar la implementación de Cola para que use una ListaDoble y luego iterar.
-        // Sin embargo, en el menú solo se pide mostrar, no tenemos que modificar la cola.
-        // Dado que Cola está implementada con ListaDoble, podríamos acceder a la lista, pero es privada.
-        // Por ahora, dejaremos este método sin implementar, o podríamos cambiar la implementación de Cola para permitir iteración.
-        // Pero para no complicar, vamos a modificar la clase Cola para que tenga un método para obtener la lista interna? No es buena idea.
-        // Otra opción: hacer una copia de la cola y desencolar hasta mostrarlos, pero se perderían los datos.
-        // Por ahora, diremos que no se puede mostrar sin perder los datos, así que no implementaremos este método.
-        System.out.println("Funcionalidad no implementada: No se puede mostrar la cola sin perder los datos.");
+        System.out.println("no se puede mostrar la cola sin perder los datos");
     }
 
+    
     public static void crearPedido(){
-        System.out.print("Ingrese el título del libro para el pedido:");
+        System.out.print("Iingrese el título del libro para el pedido:");
         String tituloPedido = scanner.nextLine();
-        System.out.print("Ingrese el autor del libro para el pedido:");
+
+    System.out.print("ingrese el autor del libro para el pedido:");
         String autorPedido = scanner.nextLine();
-        System.out.print("Ingrese el ISBN del libro para el pedido:");
+        
+        System.out.print("ingrese el ISBN del libro para el pedido:");
         String isbnPedido = scanner.nextLine();
         Libro libroPedido = libreria.crearLibro(tituloPedido, autorPedido, isbnPedido);
         Pedido pedido=null;
         if (libroPedido!=null){
             pedido = libreria.crearPedido(libroPedido, new Fecha());
             if (pedido !=null)
-                System.out.println("Pedido creado exitosamente: "+pedido);
+                System.out.println("pPedido creado exitosamente: "+pedido);
             else
-                System.out.println("No fue posible crear el pedido");
+                System.out.println("nofue posible crear el pedido");
         }else{
-            System.out.println("Error: no fue posible crear el Libro");
+            System.out.println("error: no fue posible crear elLibro");
         }
     }
 
+    
     public static void devolverLibro() throws PosicionIlegalException{
-        System.out.print("Ingrese el ISBN del libro a devolver: ");
-        String isbn = scanner.nextLine();
+        System.out.print("ingrese el ISBN del libro a devolver: ");
+    String isbn = scanner.nextLine();
         Libro libro = libreria.buscarLibro(isbn);
         if (libro != null) {
-            if (libreria.devolverLibro(libro)) {
-                System.out.println("Libro devuelto exitosamente.");
+    if (libreria.devolverLibro(libro)) {
+                
+        System.out.println("libro devuelto exitosamente");
             } else {
-                System.out.println("No se pudo devolver el libro.");
+                System.out.println("Nno se pudo devolver el libro");
             }
         } else {
-            System.out.println("Libro no encontrado en la lista de prestados.");
+            System.out.println("Llibro no encontrado en la lista de prestados");
         }
     }
 
     public static void eliminarUltimoLibro() throws PosicionIlegalException{
         Libro libro = libreria.eliminarUltimoLibro();
+        
         if (libro != null) {
-            System.out.println("Libro eliminado: " + libro);
+         System.out.println("libro eliminado: " + libro);
         } else {
-            System.out.println("No hay libros para eliminar.");
+            System.out.println("nohay libros para eliminar");
         }
     }
 
     public static void deshacerEliminarLibro(){
         Libro libro = libreria.deshacerEliminarLibro();
         if (libro != null) {
-            System.out.println("Libro restaurado: " + libro);
+        
+    System.out.println("libro restaurado: " + libro);
         } else {
-            System.out.println("No hay libros para restaurar.");
+            
+            System.out.println("no hay libros para restaurar");
         }
     }
 }

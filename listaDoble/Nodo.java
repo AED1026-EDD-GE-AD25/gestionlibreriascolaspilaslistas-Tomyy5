@@ -1,21 +1,30 @@
 package listaDoble;
 public class Nodo<T>{
+    
     //atributos
     private T valor;
-    private Nodo<T> siguiente;//referencia al siguiente nodo
-    private Nodo<T> anterior;//referencia al nodo anterior
+    private Nodo<T> siguiente;
+private Nodo<T> anterior;
+    
+    
+    
     //constructores
     public Nodo(){
         valor =null;
-        siguiente = null;
+    siguiente = null;
         anterior = null;
 
+    
+    
     }
+
+
+
     //getter y setter
-    public T getValor() {
-        return valor;
+     public T getValor() {
+    return valor;
     }
-    public void setValor(T valor) {
+       public void setValor(T valor) {
         this.valor = valor;
     }
     public Nodo<T> getSiguiente() {

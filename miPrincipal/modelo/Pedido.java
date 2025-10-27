@@ -11,15 +11,17 @@ public class Pedido {
         this.fechaPedido = fecha;
     }
 
-    public Libro getLibro() {
+       public Libro getLibro() {
         return libro;
     }
 
-    public Fecha getFecha() {
+public Fecha getFecha() {
         return fechaPedido;
     }
 
     @Override
+    
+    
     public String toString() {
         return "Pedido{" +
                 "libro=" + libro +
